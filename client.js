@@ -28,6 +28,9 @@ form.addEventListener('submit', (event) => {
   resultElement.textContent = '';
   resultElement.style.display = 'none';
 
+  errorElement.textContent = '';
+  errorElement.style.display = 'none';
+
   let finalControlCode = '';
 
   if(validateTaxId(taxid) && validateAmount(amount) && validateControlCode(controlcode)) {
