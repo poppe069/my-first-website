@@ -1,8 +1,19 @@
-console.log('Hello World!');
+// console.log('Hello World!');
 
 const form = document.querySelector('form'); // grabbing an element on the page
 const errorElement = document.querySelector('.error-message');
 const resultElement = document.querySelector('.result');
+const WOLFRAM_API_URL = "http://api.wolframalpha.com/v2/query";
+const API_KEY = "VA2WJ2-9AP4VUVU3H";
+const PARAM_OUTPUT = "json";
+const PARAM_FORMAT = "plaintext";
+const PARAM_SCANNER = "Identity";
+
+let controlcode;
+let expDate;
+let controlCodeLastDigit;
+let controlCodeTenDigit;
+let noOfMonth;
 
 errorElement.style.display = 'none';
 
@@ -19,7 +30,7 @@ form.addEventListener('submit', (event) => {
   const formData = new FormData(form);
   const taxid = formData.get('taxid');
   const amount = formData.get('amount');
-  const controlcode = formData.get('controlcode');
+  // const controlcode = formData.get('controlcode');
 
   // console.log(taxid);
   // console.log(amount);
@@ -34,7 +45,10 @@ form.addEventListener('submit', (event) => {
   let finalControlCode = '';
 
   if(validateTaxId(taxid) && validateAmount(amount) && validateControlCode(controlcode)) {
-    
+
+    errorElement.style.display = 'none';
+    // form.style.display = 'none';
+
     // console.log("finish validated");
     finalControlCode = calculate(taxid, amount, controlcode);
 
@@ -120,8 +134,7 @@ function calculate(_taxid, _amount, _controlcode) {
   modulusResult = (sumTaxID + sumAmount + sumControlCode) % modulus;
   // console.log(modulusResult);
 
-  return _controlcode.concat(modulusResult.toString(), "0");
-
+  return _controlcode.concat(modulusResult.toString(), controlCodeLastDigit);
 }
 
 function validateTaxId(_taxid) {
@@ -151,4 +164,81 @@ function validateControlCode(_controlcode) {
   } else {
     return false;
   }
+}
+
+function populateQuery(_expireDate) {
+  let prefix = "month from 2002-01 to ";
+  
+  return prefix.concat(_expireDate.substr(0, _expireDate.length - 3));
+}
+
+function paymentDueDateHandler(e) {
+  console.log(e.target.value);
+
+  const _value = e.target.value;  
+  let expMonth = _value.substr(_value.length - 5, 2);
+  let expYear = _value.substr(0, 4);
+  expDate = _value.substr(_value.length - 2, 2);
+
+  // console.log(expDate);
+  // console.log(expMonth);
+  // console.log(expYear);
+
+  let monthDifference = monthDiff(
+    new Date(2002, 0, 0), // *Fix start date
+    new Date(expYear, Number(expMonth) - 1, 0)
+  );
+
+  // Increase monthDifference by 2
+  monthDifference += 2;
+
+  // console.log(monthDifference);
+
+  controlCodeLastDigit = monthDifference.toString().substr(0, 1);
+  // console.log(controlCodeLastDigit);
+
+  controlCodeTenDigit = expDate.concat("110", monthDifference.toString().substr(1, 2), "002")
+  // console.log(controlCodeTenDigit);
+
+  controlcode = controlCodeTenDigit;
+
+  /*
+  Experimental: Call Wolfram API for the number of month
+  Issue: Found same-origin error while testing on laptop -- fix by assigning 'no-cors' on mode parameter while posting
+         but found another javascript error.
+  */
+  // let input = populateQuery(e.target.value);
+  // console.log(input);  
+  // fetch(`${WOLFRAM_API_URL}?appid=${API_KEY}&input=${input}&output=${PARAM_OUTPUT}&format=${PARAM_FORMAT}&scanner=${PARAM_SCANNER}`, {
+  //     method: "GET",
+  //     mode: "no-cors",
+  //     cache: "no-cache",
+  //     credentials: "omit",
+  //     headers: {
+  //       "Content-Type": "text/plain;charset=utf-8"
+  //     },
+  //     referrer: "no-referrer",
+  //   })
+  //   .then(response => response.json())
+  //   .then(result => {
+  //     noOfMonth = result.queryresult.pods[1].subpods[0].plaintext;
+  //     console.log(noOfMonth);
+  //   });
+
+}
+
+function monthDiff(d1, d2) {
+  let months;
+  months = (d2.getFullYear() - d1.getFullYear()) * 12;
+  months -= d1.getMonth() + 1;
+  months += d2.getMonth();
+  return months <= 0 ? 0 : months;
+}
+
+function clearDisplay() {
+  resultElement.textContent = '';
+  resultElement.style.display = 'none';
+
+  errorElement.textContent = '';
+  errorElement.style.display = 'none';
 }
