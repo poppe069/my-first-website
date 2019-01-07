@@ -20,7 +20,8 @@
       <label for="amount">Amount</label>
       <input class="u-full-width" type="number" id="amount" name="amount" placeholder="999999.99" step="0.01">
       <label for="paymentduedate">Payment Due Date</label>
-      <input class="u-full-width" type="date" name="paymentduedate" id="paymentduedate" onchange="paymentDueDateHandler(event);">
+      <input type="date" name="paymentduedate" id="paymentduedate" onchange="paymentDueDateHandler(event);">
+      <br>
       <!-- <input class="u-full-width" type="number" id="controlcode" name="controlcode" placeholder="Control Code (10 digits)"> -->
       <button class="button-primary">Generate</button>
       <button class="button" type="reset" onclick="clearDisplay();">Reset</button>

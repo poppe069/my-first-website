@@ -8,6 +8,8 @@ const API_KEY = "VA2WJ2-9AP4VUVU3H";
 const PARAM_OUTPUT = "json";
 const PARAM_FORMAT = "plaintext";
 const PARAM_SCANNER = "Identity";
+const CTRL_345 = "000";
+const CTRL_890 = "000";
 
 let controlcode;
 let expDate;
@@ -197,7 +199,7 @@ function paymentDueDateHandler(e) {
   controlCodeLastDigit = monthDifference.toString().substr(0, 1);
   // console.log(controlCodeLastDigit);
 
-  controlCodeTenDigit = expDate.concat("110", monthDifference.toString().substr(1, 2), "002")
+  controlCodeTenDigit = expDate.concat(CTRL_345, monthDifference.toString().substr(1, 2), CTRL_890)
   // console.log(controlCodeTenDigit);
 
   controlcode = controlCodeTenDigit;
