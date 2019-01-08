@@ -96,7 +96,7 @@ function calculate(_taxid, _amount, _controlcode) {
 
   let taxIDMultiplier = [13, 11, 7, 5, 3, 1];
   let amountMultiplier = [61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 111, 113];
-  let controlCodeMultiplier = [17, 19, 23, 29, 31, 37, 41, 43, 53, 59];
+  let controlCodeMultiplier = [17, 19, 23, 29, 31, 37, 41, 43, 53, 59, 117];
 
   // Tax ID
   let arrTaxID = _taxid.split('');
@@ -130,6 +130,9 @@ function calculate(_taxid, _amount, _controlcode) {
   for(let i=0; i<arrControlCode.length; i++) {
     sumControlCode += Number(arrControlCode[i]) * controlCodeMultiplier[i];
   }
+
+  // Last digits
+  sumControlCode += controlCodeLastDigit * controlCodeMultiplier[10];
   // console.log(sumControlCode);
 
   // Control Code (11 - 14)
