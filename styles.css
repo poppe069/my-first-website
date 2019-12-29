@@ -1,0 +1,39 @@
+.title {
+  text-align: center;
+}
+
+.error-message {
+  background: #ff9b9b;
+  color: white;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.etax-form {
+  width: 50%;
+  margin: 0 auto;
+}
+
+.result {
+  width: 50%;
+  margin: 0 auto;
+  border-radius: 5px;
+}
+
+.result > div {
+  background: hsl(0, 0%, 95%);
+  padding: 12px;
+  border-radius: 4px;
+}
+
+.result > div > p {
+  word-wrap: break-word;
+  padding: 0px;
+  margin: 0px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin: 1em;
+}
